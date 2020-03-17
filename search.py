@@ -17,7 +17,7 @@ from collections import Counter
 ps = PorterStemmer()
 
 ngrams_dict = [dict(), dict(), dict()]
-ngrams_occur_freq = [set(), set(), set()]
+ngrams_occur_freq = [list(), list(), list()]
 resp_dict = {}
 pos_top_15 = {}
 
@@ -38,7 +38,6 @@ def searchfunc(term, n):
         else:
             filename += '_' + '1'
     filename += '.pickle'
-    print(filename)
     if(os.path.exists(filename)):
         with open(filename , 'rb') as handle:
             mydict = pickle.load(handle)
@@ -46,18 +45,19 @@ def searchfunc(term, n):
                 resp_dict[term] = mydict[term][:-1].strip('[]').split(', ')
                 ngrams_dict[n-1][term] = mydict[term][:-1].strip('[]').split(', ')
                 
-    #resp_dict[term] = resp[term]
     return resp_dict
 
 
 def sortbyoccurence(ng_dict, n):
-    print(list(ng_dict.values())[2])
-    resp_id = Counter([x.split('|', 1)[0] for x in list(ng_dict.values()))
+    val_list = []
+    for k in ng_dict:
+        val_list += ng_dict[k]
+    resp_id = Counter([x.split('|', 1)[0] for x in val_list])
     sorted_resp_id = sorted(resp_id, key = resp_id.get, reverse = True)
     if len(sorted_resp_id) >= 15:
-        ngrams_occur_freq[n] = set(sorted_resp_id[:15])
+        ngrams_occur_freq[n] = (sorted_resp_id[:15])
     else:
-        ngrams_occur_freq[n] = set(sorted_resp_id)
+        ngrams_occur_freq[n] = (sorted_resp_id)
     
     return
 
@@ -104,7 +104,6 @@ if __name__ == '__main__':
     # 5 threads for onegrams, 6 for twograms, 7 for threegrams
     d = {}
     for i in range(len(three_grams.keys())):
-        print(three_grams)
         d[i % 5] = threading.Thread(target=searchfunc, args= (list(three_grams.keys())[i], 3))
         d[i % 5].start()
     for i in range(len(two_grams.keys())):
@@ -122,17 +121,18 @@ if __name__ == '__main__':
 
     # set top 15 of each ngrams
 
-    #print(sortbyoccurence(ngrams_dict[1], 1))
+    #print(sortbyoccurence(ngrams_dict[2], 2))
 
-    # ng = {}
-    # for i in range(3):
-    #     ng[i] = threading.Thread(target=sortbyoccurence, args=(ngrams_dict[i], i))
-    #     ng[i].start()
-    #
-    # for i in range(3):
-    #     if ng.get(i, None):
-    #         ng[i].join()
 
+    ng = {}
+    for i in range(3):
+        ng[i] = threading.Thread(target=sortbyoccurence, args=(ngrams_dict[i], i))
+        ng[i].start()
+
+    for i in range(3):
+        if ng.get(i, None):
+            ng[i].join()
+    print(ngrams_occur_freq)
 
 '''
     top_45 = set()
