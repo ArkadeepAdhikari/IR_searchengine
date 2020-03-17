@@ -9,14 +9,14 @@ from IndexBuilder import processText
 from nltk.stem import PorterStemmer
 import threading
 from IndexHasher import getgroup
-from Assignment1.PartA import filename
+#from Assignment1.PartA import filename
 import os
 import pickle
 from collections import Counter
 
 ps = PorterStemmer()
 #resp_dict = {}
-ngrams_dict = [dict(), dict(), dict()]
+#ngrams_dict = [dict(), dict(), dict()]
 ngrams_occur_freq = [set(), set(), set()]
 resp_dict = {}
 pos_top_15 = {}
@@ -33,20 +33,21 @@ def searchfunc(term, n):
     filename += term[0]
     length = len(term)
     for p in range(4):
-        if p + 1 >= length - 1:
+        if p + 1 <= length - 1:
             filename += '_' + str(getgroup(term[p + 1]) + 1)
         else:
             filename += '_' + '1'
-    
+    filename += '.pickle'
+    print(filename)
     if(os.path.exists(filename)):
-        with open(filename, 'rb') as handle:
+        with open(filename , 'rb') as handle:
             mydict = pickle.load(handle)
             if term in mydict:
                 resp_dict[term] = mydict[term][:-1].strip('[]').split(', ')
-                ngrams_dict[n-1][term] = mydict[term][:-1].strip('[]').split(', ')
+                #ngrams_dict[n-1][term] = mydict[term][:-1].strip('[]').split(', ')
                 
     #resp_dict[term] = resp[term]
-    return resp_dict                
+    return resp_dict
 
 
 def sortbyoccurence(resp_dict, n):
@@ -96,7 +97,9 @@ if __name__ == '__main__':
     print(one_grams)
     print(two_grams)
     print(three_grams)
-    
+    #print(searchfunc('master of comput', 3))
+
+
     # 5, 6, 7
     # tokens = list(three_grams.keys()) + list(two_grams.keys()) + list(one_grams.keys())
     d = {}
@@ -109,47 +112,45 @@ if __name__ == '__main__':
     for i in range(len(one_grams.keys())):
         d[11 + (i % 7)] = threading.Thread(target=searchfunc, args=one_grams.keys()[i], 1)
         d[11 + (i % 7)].start()
-    
-    
+
     for i in range(18):
         if d.get(i, None):
             d[i].join()
-    
+
     # set top 15 of each ngrams
     ng = {}
     for i in range(3):
-        ng[i] = threading.Thread(target=sortbyoccurence, args = (ngrams_dict[i], i))
+        ng[i] = threading.Thread(target=sortbyoccurence, args=(ngrams_dict[i], i))
         ng[i].start()
-    
+
     for i in range(3):
         if ng.get(i, None):
             ng[i].join()
-    
+
     top_45 = set()
     for i in ngrams_occur_freq:
         top_45 |= i
-    
+
     # get positions into pos_top_45
-    # given a set of docids return positoions into a dict named pos_top_15
+    # given a set of docids return positions into a dict named pos_top_15
     p = {}
     for i in range(len(top_45)):
-        p[i] = threading.Thread(target = getpos, args = (top_45))
-        p[i].start
+        p[i] = threading.Thread(target=getpos, args=(top_45))
+        p[i].start()
     for i in range(len(top_45)):
         if p.get(i, None):
             p[i].join()
-    
-    
+
     # matches found = 0
-    
+
     # search for 3 grams
-    
+
     # list of doc-Ids and postions
-    
+
     # check for intersection of doc Ids
     # sort based on positions - 2 groups
     # sort based on number of occurences
     # see if matches == 5
-    
+
     # (common_terms/total_terms * pos_score * (sum of tfidfs)) * n
-    
+
