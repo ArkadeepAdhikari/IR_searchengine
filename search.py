@@ -53,15 +53,11 @@ def sortbyoccurence(ng_dict, n):
     for k in ng_dict:
         val_list += ng_dict[k]
     resp_id = Counter([x.split('|', 1)[0] for x in val_list])
-    sorted_resp_id = sorted(resp_id, key = resp_id.get, reverse = True)
-    if len(sorted_resp_id) >= 15:
-        ngrams_occur_freq[n] = (sorted_resp_id[:15])
-    else:
-        ngrams_occur_freq[n] = (sorted_resp_id)
+    ngrams_occur_freq[n] = resp_id.most_common((15)) # stores a tuple of (docId, count) for corresponding n_gram
     
     return
 
-def getpos(top_45): # merge this with searchfunc
+def getpos(doc_id):
     pass
     
 
@@ -137,13 +133,16 @@ if __name__ == '__main__':
 '''
     top_45 = set()
     for i in ngrams_occur_freq:
-        top_45 |= i
+        top_45 |= set(i)
+
+    print(top_45)
+    top_45 = list(top_45)
 
     # get positions into pos_top_45
     # given a set of docids return positions into a dict named pos_top_15
     p = {}
     for i in range(len(top_45)):
-        p[i] = threading.Thread(target=getpos, args=(top_45))
+        p[i] = threading.Thread(target=getpos, args=(top_45[i][0]))
         p[i].start()
     for i in range(len(top_45)):
         if p.get(i, None):
