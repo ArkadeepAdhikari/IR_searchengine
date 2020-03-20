@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search In the Corpus</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style>
+    .container {
+      padding-top: 50px;
+      max-width: 400px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <form role="form" method="POST" action=".">
+        <div class="form-group">
+          <input type="text" id="post_form_id" class="form-control" name="my_form" placeholder="Enter your search query">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <br>
+      {% if result and  getRes == 1 %}
+	<div align="center">
+					<h3>Search results for {{ search_key }} </h3>
+					<h3>TimeTaken = {{timedVar}} </h3>
+					<br>
+					{% for url in result %}
+					
+					<div id ="results">
+					<a href= {{ url|tojson|safe }}> {{url}}</a>
+					</div>
+					{% endfor %}
+				</div>	
+	{% endif %}
+
+	{%if not result and  getRes == 1 %}
+				<div align="center">
+					<h3>No search results for {{ search_key }} </h3>					
+				</div>	     
+	{% endif %}
+	
+    </div>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
