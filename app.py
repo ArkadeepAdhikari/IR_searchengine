@@ -18,5 +18,4 @@ def form():
 
 if __name__ == '__main__':
      search.get_urls_from_ids()
-     
      app.run(debug=False)   

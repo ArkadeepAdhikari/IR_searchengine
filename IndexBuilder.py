@@ -8,14 +8,11 @@ import csv
 
 '''
 Iterate through files
-    add entryinto doc hashMap - id,url
-    extract content (<!Doctype Html)
-    
-    parse using beautiful soup from Assign 2
-    
-    Contruct Inverted Index - 1GB at a time
-    Merge Indices 
-    
+add entry into doc hashMap - id,url
+extract content (<!Doctype Html)
+parse using beautiful soup 
+Construct Inverted Index - 1GB at a time
+Merge Indices   
 '''
 
 tagsScoreDict = {'title':9, 'h1':8, 'h2':7, 'h3':6, 'h4':5, 'h5':4, 'h6':3}
@@ -215,4 +212,3 @@ if __name__ == '__main__':
             file.write('\n')
         file.write("}") 
     print('Done')      
-     
