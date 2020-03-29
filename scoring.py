@@ -1,4 +1,3 @@
-import os
 import math
 
 
@@ -8,10 +7,7 @@ def getContent(f_gram, f_score):
     old_score_content = score_content
     
     while gram_content and score_content and gram_content[0] != score_content[0]:
-        
-        #print(gram_content + '    ' + str(score_content[0]))
         score_content = f_score.readline()[:-1].split(':')
-        
         if not score_content:
             print('Reached EOF looking for ' + gram_content[0])
             gram_content = f_gram.readline()[:-1].split(':')

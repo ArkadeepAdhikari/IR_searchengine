@@ -1,14 +1,8 @@
-import pickle
-import os
-import time
-
 if __name__ == '__main__':
     folder = 'scores_splits/'
     char = 'a'
     myfile = open(folder + 'a.txt', 'w+')
     myfile.write('{\n')
-    # arr = [0, 0, 0, 0]
-    # filename = getfilename(folder, char, arr)
     
     mydict = {}
     index = open('new_scores.txt', 'r')
@@ -20,7 +14,8 @@ if __name__ == '__main__':
         key = terms[0]
         length = len(key)
         hasdigits = False
-        if key == '}':break
+        if key == '}':
+            break
         if key[0].isdigit(): 
             hasdigits = True
         else :
@@ -28,11 +23,9 @@ if __name__ == '__main__':
                 if p + 1 <= length - 1:
                     if key[p + 1].isdigit():
                         hasdigits = True
-                        break;
+                        break
                 
         if hasdigits:
-            # filename = folder + 'digits.pickle'   
-            # ignore
             line = index.readline()
             continue
         if key[0] == char:
@@ -49,8 +42,7 @@ if __name__ == '__main__':
             myfile.close()
             
             print(char)
-            
-            
+
             mydict.clear()
             char = key[0]
             
@@ -59,5 +51,3 @@ if __name__ == '__main__':
             myfile.write('{\n')
             
         line = index.readline()
-    
-     
