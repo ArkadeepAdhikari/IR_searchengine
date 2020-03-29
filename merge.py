@@ -1,5 +1,3 @@
-# import Queue
-
 import threading
 import os
 
@@ -14,7 +12,6 @@ def merge(file1, file2, thread, outputpath):
             finalFile.write(l1)
             if not l1: break
         finalFile.flush()
-        #finalFile.writelines([l for l in open(file1).readlines()])
 
     else:
 
@@ -29,7 +26,6 @@ def merge(file1, file2, thread, outputpath):
 
         if len(content1) == 2 and len(content2) == 2:
             key1, list1, key2, list2 = content1[0], content1[1], content2[0], content2[1]
-            #print(key1, list1, key2, list2)
         while len(content1) == 2 and len(content2) == 2:
             finalkey, finallist = None, []
             if key1 < key2:
